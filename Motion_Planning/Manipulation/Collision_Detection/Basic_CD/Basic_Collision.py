@@ -100,7 +100,8 @@ class Basic_Collision:
         Returns:
             bool: True if the state is valid, False otherwise.
         """
-        self.robot.sim_set_arm_to_joint_values(state)
+        # close show state valid progress cuz maybe collision happen
+        # self.robot.sim_set_arm_to_joint_values(state)
 
         # check arm self-collision
         if self.check_arm_self_collision():
