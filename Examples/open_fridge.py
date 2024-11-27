@@ -100,7 +100,7 @@ def main(filename):
 
     # Draw fridge door handle
     visualizer.draw_aabb_link("fridge", 2)
-    
+
     # Init planner
     ompl_planner = OMPL_Planner(bestman, cfg.Planner)
 
@@ -115,17 +115,17 @@ def main(filename):
         [0.0, 0.0, 0.0],
     )
     goal = ompl_planner.set_target_pose(goal_pose)
-    
+
     # Plan / Execute / Suctate fridge handle
     start = bestman.sim_get_current_joint_values()
     path = ompl_planner.plan(start, goal)
     bestman.sim_execute_trajectory(path, True)
     bestman.sim_create_movable_constraint("fridge", 2)
-    
+
     visualizer.remove_all_line()
 
     # The end effector Move along the specified trajectory get effector to open the door
-    init_pose = bestman.sim_get_current_end_effector_pose()
+    init_pose = bestman.sim_get_current_eef_pose()
     rotate_axis = p.getLinkState(client.get_object_id("fridge"), 1)[4]
     angles = 80
     heta_values = [math.radians(deg) for deg in range(0, angles + 1)]

@@ -12,7 +12,7 @@ Visualizer:
 
 # Robot params
 Robot:
-  arm_init_jointValues: [0.147, 0, -0.062, 1.561, -0.215, 0.009, -0.062]
+  arm_reset_jointValues: [0.147, 0, -0.062, 1.561, -0.215, 0.009, -0.062]
   arm_urdf_path: "Asset/Robot/mobile_manipulator/arm/flexiv/urdf/flexiv_rizon4_robotiq_2f85.urdf"          # arm urdf
-  arm_joints_idx: [0, 1, 2, 3, 4, 5, 6]                                      # 7 DOF
-  # end_effector_index: 11
+  arm_num_dofs: 7                                      # 7 DOF
+  eef_id: 7

@@ -13,7 +13,7 @@ import os
 
 from Config import load_config
 from Env.Client import Client
-from Robotics_API.Bestman_sim_panda import Bestman_sim_panda
+from Robotics_API.Bestman_sim_panda_with_gripper import Bestman_sim_panda_with_gripper
 from Visualization.Visualizer import Visualizer
 
 
@@ -32,7 +32,7 @@ def main(filename):
     visualizer.start_record(filename)
 
     # Init robot
-    panda = Bestman_sim_panda(client, visualizer, cfg)
+    panda = Bestman_sim_panda_with_gripper(client, visualizer, cfg)
 
     # Interact with arm
     panda.sim_interactive_set_arm(50)

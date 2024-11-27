@@ -1,4 +1,27 @@
+[submodule "Robot"]
+	path = Asset/Robot
+	url = https://github.com/starry521/Robot
+
 [submodule "URDF_models"]
-	path = Asset/Scene/URDF_models
-    url = https://github.com/yding25/URDF_models.git
-    branch = main
+	path = Asset/Scene/Object/URDF_models
+	url = https://github.com/yding25/URDF_models
+
+[submodule "Kitchen_world_models"]
+	path = Asset/Scene/Object/Kitchen_world_models
+	url = https://github.com/starry521/Kitchen_world_models
+
+[submodule "third_party"]
+	path = Install/third_party
+	url = https://github.com/starry521/third_party
+
+[submodule "urdformer"]
+	path = DigitalTwin/urdformer
+	url = https://github.com/starry521/urdformer.git
+
+[submodule "acdc"]
+	path = DigitalTwin/acdc
+	url = https://github.com/starry521/digital-cousins.git
+
+[submodule "RoboTwin"]
+	path = DigitalTwin/RoboTwin
+	url = https://github.com/TianxingChen/RoboTwin.git

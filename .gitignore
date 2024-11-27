@@ -17,3 +17,5 @@ Asset/mobile_manipulator/arm/moveit_config
 Perception/Grasp_Pose_Estimation/AnyGrasp/license
 Perception/Grasp_Pose_Estimation/AnyGrasp/checkpoints/checkpoint_detection.tar
 Install/third_party/pointnet2/
+**/data.pkl
+Asset/Scene/Object/assets/

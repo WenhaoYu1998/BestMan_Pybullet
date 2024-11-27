@@ -13,7 +13,7 @@ import os
 
 from Config import load_config
 from Env import Client
-from Robotics_API import Bestman_sim_panda
+from Robotics_API import Bestman_sim_panda_with_gripper
 from Visualization import Visualizer
 
 
@@ -30,9 +30,9 @@ def main(filename):
 
     # Start recording
     visualizer.start_record(filename)
-    
+
     # Init robot
-    bestman = Bestman_sim_panda(client, visualizer, cfg)
+    bestman = Bestman_sim_panda_with_gripper(client, visualizer, cfg)
     visualizer.change_robot_color(
         bestman.sim_get_base_id(), bestman.sim_get_arm_id(), False
     )

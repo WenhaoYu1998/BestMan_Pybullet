@@ -14,4 +14,4 @@ Visualizer:
       pitch: 307.4
 
 Robot:
-  arm_init_jointValues: [0, -1.57, 2.0, -1.57, -1.57, 0]
+  arm_reset_jointValues: [0, -1.57, 2.0, -1.57, -1.57, 0]

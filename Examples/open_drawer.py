@@ -49,7 +49,7 @@ def main(filename):
     # Load drawer
     drawer_id = client.load_object(
         "elementA",
-        "Asset/Scene/Kitchen_models/models_yan/elementA/urdf/kitchen_part_right_gen_convex.urdf",
+        "Asset/Scene/Object/Kitchen_world_models/elementA/urdf/kitchen_part_right_gen_convex.urdf",
         [4, 2, 1.477],
         [0, 0, math.pi],
         1.0,
@@ -60,13 +60,11 @@ def main(filename):
     ur5e = Bestman_sim_ur5e_vacuum_long(client, visualizer, cfg)
 
     # Init visualizer
-    visualizer.change_robot_color(
-        ur5e.sim_get_base_id(), ur5e.sim_get_arm_id(), False
-    )
+    visualizer.change_robot_color(ur5e.sim_get_base_id(), ur5e.sim_get_arm_id(), False)
 
     # Draw drawer link
     visualizer.draw_aabb_link("elementA", 38)
-    
+
     # Init planner
     ompl_planner = OMPL_Planner(ur5e, cfg.Planner)
 
@@ -74,11 +72,16 @@ def main(filename):
     min_x, min_y, min_z, max_x, max_y, max_z = client.get_link_bounding_box(
         "elementA", 38
     )
-    
+
     # client.wait(10)
-    
+
     goal_pose = Pose(
-        [min_x - ur5e.sim_get_tcp_link_height()- 0.05, (min_y + max_y) / 2, (min_z + max_z) / 2], [0.0, 0.0, 0.0]
+        [
+            min_x - ur5e.sim_get_tcp_link_height() - 0.05,
+            (min_y + max_y) / 2,
+            (min_z + max_z) / 2,
+        ],
+        [0.0, 0.0, 0.0],
     )
     goal = ompl_planner.set_target_pose(goal_pose)
 
@@ -89,10 +92,9 @@ def main(filename):
     ur5e.sim_create_movable_constraint("elementA", 38)
 
     # The end effector Move along the specified trajectory get effector to open the drawer
-    init_pose = ur5e.sim_get_current_end_effector_pose()
+    init_pose = ur5e.sim_get_current_eef_pose()
     pull_joints = [
-        ur5e.sim_cartesian_to_joints(pull_out(init_pose, i, 0.05))
-        for i in range(0, 5)
+        ur5e.sim_cartesian_to_joints(pull_out(init_pose, i, 0.05)) for i in range(0, 5)
     ]
     ur5e.sim_execute_trajectory(pull_joints, True)
 

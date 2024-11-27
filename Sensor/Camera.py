@@ -52,10 +52,18 @@ class Camera:
         # camera rgb and depth image
         self.sim_update()
 
-        # cameara intrinsic parameters
+        # camera intrinsic parameters
         self.sim_get_focal_length()
         self.cx = self.width / 2
         self.cy = self.height / 2
+        cfg.fx = self.fx
+        cfg.fy = self.fy
+        cfg.cx = self.cx
+        cfg.cy = self.cy
+
+        # 3d points
+        self.min_depth = cfg.min_depth
+        self.max_depth = cfg.max_depth
 
     def sim_get_focal_length(self):
         """
@@ -249,7 +257,7 @@ class Camera:
         vis.run()
         vis.destroy_window()
 
-    def sim_get_3d_points(self, filter_dist=[0, 1]):
+    def sim_get_3d_points(self):
         """
         Convert depth image to 3D point cloud.
 
@@ -261,7 +269,7 @@ class Camera:
         points_z = self.depths
         points_x = (xmap - self.cx) / self.fx * points_z
         points_y = (ymap - self.cy) / self.fy * points_z
-        mask = (points_z > filter_dist[0]) & (points_z < filter_dist[1])
+        mask = (points_z > self.min_depth) & (points_z < self.max_depth)
         points = np.stack([points_x, -points_y, points_z], axis=-1)
         points = points[mask].astype(np.float32)
         colors = (self.colors / 255.0)[mask].astype(np.float32)

@@ -189,7 +189,7 @@ class Visualizer:
         print(
             f"[Visualizer] \033[34mInfo\033[0m: The video can be found in Examples/video/{fileName}.mp4"
         )
-        
+
     def end_record(self):
         """Stops recording the video."""
         p.stopStateLogging(self.logId, physicsClientId=self.client_id)

@@ -33,38 +33,6 @@ class Bestman_sim_ur5e_vacuum_long(Bestman_sim):
         """
         super().__init__(client, visualizer, cfg)
 
-        # Init arm
-        arm_pose = self.sim_get_sync_arm_pose()
-        self.arm_id = self.client.load_object(
-            obj_name="arm",
-            model_path=self.robot_cfg.arm_urdf_path,
-            object_position=arm_pose.get_position(),
-            object_orientation=arm_pose.get_orientation(),
-            fixed_base=True,
-        )
-        self.arm_jointInfo = self.sim_get_arm_all_jointInfo()
-        self.arm_lower_limits = [info.lowerLimit for info in self.arm_jointInfo]
-        self.arm_upper_limits = [info.upperLimit for info in self.arm_jointInfo]
-        self.arm_joint_ranges = [
-            info.upperLimit - info.lowerLimit for info in self.arm_jointInfo
-        ]
-
-        # Add constraint between base and arm
-        p.createConstraint(
-            parentBodyUniqueId=self.base_id,
-            parentLinkIndex=-1,
-            childBodyUniqueId=self.arm_id,
-            childLinkIndex=-1,
-            jointType=p.JOINT_FIXED,
-            jointAxis=[0, 0, 0],
-            parentFramePosition=[0, 0, 0],
-            childFramePosition=[0, 0, 0],
-            physicsClientId=self.client_id,
-        )
-
-        # Init arm joint angle
-        self.sim_set_arm_to_joint_values(self.robot_cfg.arm_init_jointValues)
-
         # change robot color
         self.visualizer.change_robot_color(self.base_id, self.arm_id, False)
 
@@ -117,7 +85,7 @@ class Bestman_sim_ur5e_vacuum_long(Bestman_sim):
             else:
                 self.gripper_id = p.createConstraint(
                     self.arm_id,
-                    self.end_effector_index,
+                    self.eef_id,
                     object_id,
                     -1,
                     p.JOINT_FIXED,
@@ -197,15 +165,15 @@ class Bestman_sim_ur5e_vacuum_long(Bestman_sim):
         Args:
             object (str): The name or ID of the object to be picked up.
         """
-        init_pose = self.sim_get_current_end_effector_pose()
+        init_pose = self.sim_get_current_eef_pose()
         min_x, min_y, _, max_x, max_y, max_z = self.client.get_bounding_box(object)
         pick_pose = Pose(
             [(min_x + max_x) / 2, (min_y + max_y) / 2, max_z + self.tcp_height],
             [0.0, math.pi / 2.0, 0.0],
         )
-        self.sim_move_end_effector_to_goal_pose(pick_pose)
+        self.sim_move_eef_to_goal_pose(pick_pose)
         self.sim_open_vacuum_gripper(object)
-        self.sim_move_end_effector_to_goal_pose(init_pose)
+        self.sim_move_eef_to_goal_pose(init_pose)
 
     def place(self, place_pose):
         """
@@ -214,10 +182,10 @@ class Bestman_sim_ur5e_vacuum_long(Bestman_sim):
         Args:
             place_pose (Pose): The pose to place object
         """
-        init_pose = self.sim_get_current_end_effector_pose()
-        self.sim_move_end_effector_to_goal_pose(place_pose)
+        init_pose = self.sim_get_current_eef_pose()
+        self.sim_move_eef_to_goal_pose(place_pose)
         self.sim_close_vacuum_gripper()
-        self.sim_move_end_effector_to_goal_pose(init_pose)
+        self.sim_move_eef_to_goal_pose(init_pose)
 
     def pick_place(self, object, place_pose):
         """

@@ -15,7 +15,7 @@ import os
 from Config import load_config
 from Env import Client
 from Motion_Planning.Navigation import *
-from Robotics_API import Bestman_sim_panda, Pose
+from Robotics_API import Bestman_sim_panda_with_gripper, Pose
 from Visualization import Visualizer
 
 
@@ -35,12 +35,12 @@ def main(filename):
     visualizer.start_record(filename)
 
     # Init robot
-    bestman = Bestman_sim_panda(client, visualizer, cfg)
+    bestman = Bestman_sim_panda_with_gripper(client, visualizer, cfg)
 
     # Load table and lego
     table_id = client.load_object(
         "table",
-        "Asset/Scene/URDF_models/furniture_table_rectangle_high/table.urdf",
+        "Asset/Scene/Object/URDF_models/furniture_table_rectangle_high/table.urdf",
         [1.0, 1.0, 0.0],
         [0.0, 0.0, 0.0],
         1.0,
@@ -48,11 +48,7 @@ def main(filename):
     )
 
     lego_id = client.load_object(
-        "lego",
-        "lego/lego.urdf",
-        [0.6, 0.6, 0.85],
-        [0.0, 0.0, 0.0],
-        1.0
+        "lego", "lego/lego.urdf", [0.6, 0.6, 0.85], [0.0, 0.0, 0.0], 1.0
     )
 
     # grasp target object

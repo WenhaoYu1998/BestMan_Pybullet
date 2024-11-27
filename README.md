@@ -30,143 +30,41 @@ A mobile manipulator (with a wheel-base and arm) platform built on PyBullet simu
 
 ## 📋 Contents
 
-- [🔥 News](#-News)
-- [🏠 Getting Started](#-Getting-Started)
-- [👨‍💻 Basic Demos](#-Basic-Demos)
+- [🔥 News](#-news)
+- [🎯 Framework](#-Framework)
+- [🏠 Getting Started](#-getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [👨‍💻 Basic Demos](#-basic-demos)
+  - [🌏 Overview](#-overview)
+  - [🚀 Run](#-run)
+  - [🎇 Blender Render](#-blender-render)
 - [📝 TODO List](#-todo-list)
-- [🤝 Reference](#-Reference)
-- [👏 Acknowledgements](#-Acknowledgements)
+- [🤝 Reference](#-reference)
+- [👏 Acknowledgements](#-acknowledgements)
+- [🚀 Working citing BestMan](#-working-citing-bestman)
 
 ## 🔥 News
+- [2024-11] We released version 0.2.0, optimizing modules such as Install and Robotics API.
 - [2024-10] We release the [paper](http://arxiv.org/abs/2410.13407) of BestMan.
+
+## 🎯 Framework
+
+![Framework](docs/_static/other/bestman_framework.jpg)
 
 ## 🏠 Getting Started
 
 ### Prerequisites
+
+> ***Note**: We recommand Ubuntu 22.04 and python version deault to 3.8.*
+
 - Ubuntu 20.04, 22.04
-- Conda
-  
+- Conda 
   - Python 3.8, 3.9, 3.10
 
 ### Installation
 
-Pull the repository and update the submodule
-
-```
-git clone https://github.com/AutonoBot-Lab/BestMan_Pybullet.git
-cd BestMan_Pybullet
-git submodule update --init
-```
-
-### :shamrock: Conda
-
-- Run the following script to add the project to the PYTHON search path
-```
-cd Install
-chmod 777 pythonpath.sh
-bash pythonpath.sh
-source ~/.bashrc
-```
-
-- Install ffmpeg to enable video record
-```
-sudo apt update && sudo apt install ffmpeg
-```
-
-- Configure related libraries and links to support OpenGL rendering (If it already exists, skip this step.)
-```
-sudo apt update && sudo apt install -y libgl1-mesa-glx libglib2.0-0
-sudo mkdir /usr/lib/dri
-sudo ln -s /lib/x86_64-linux-gnu/dri/swrast_dri.so /usr/lib/dri/swrast_dri.so
-```
-
-- Install gcc/g++ 9 (If it already exists, skip this step.)
-```
-sudo apt install -y build-essential gcc-9 g++-9
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
-sudo update-alternatives --config gcc  # choice gcc-9
-sudo update-alternatives --config g++  # choice g++-9
-
-# Make sure gcc and g++ versions are consistent (conda enviroment don't install gcc to prevent problems caused by inconsistent versions)
-gcc -v
-g++ -v
-```
-
-- Configure mamba to speed up the conda environment construction (Optional, skip if installation is slow or fails)
-```
-conda install mamba -n base -c conda-forge
-```
-
-- Create basic conda environment
-```
-conda(mamba) env create -f basic_env.yaml
-conda(mamba) activate BestMan
-```
-
-- Install torch
-```
-conda(mamba) env update -f cuda116.yaml
-```
-
-- Install lang-segment-anything
-```
-pip install -U git+https://github.com/luca-medeiros/lang-segment-anything.git
-```
-
-- Install AnyGrasp
-
-&emsp;&emsp;**Note**:
-  
-> &emsp;You need to get anygrasp [license and checkpoint](./Perception/Grasp_Pose_Estimation/AnyGrasp/README.md) to use it.
-
-> &emsp;You need `export MAX_JOBS=2` in terminal; before pip install if you are running on an laptop due to [this issue](https://github.com/NVIDIA/MinkowskiEngine/issues/228).
-```
-# Install MinkowskiEngine
-conda install pytorch=1.13.1 -c pytorch --force-reinstall
-pip install -U git+https://github.com/NVIDIA/MinkowskiEngine -v --no-deps --global-option="--blas_include_dirs=${CONDA_PREFIX}/include" --global-option="--blas=openblas"
-
-# Install graspnetAPI
-pip install graspnetAPI
-
-# Install pointnet2
-cd third_party/pointnet2
-python setup.py install
-
-# Force reinstall to ensure version
-pip install --force-reinstall opencv-python==4.1.2.30 numpy==1.23.5
-```
-
-
-### :shamrock: Docker
-
-##### Windows
-
-- Pull docker image from tencentyun
-
-```
-docker pull ccr.ccs.tencentyun.com/4090/bestman:v1
-```
-
-- Create docker container
-
-```
-docker run -it --gpus all --name BestMan ccr.ccs.tencentyun.com/4090/bestman:v1
-```
-
-- Install [VcXsrv Windows X Server](https://sourceforge.net/projects/vcxsrv/), Start and keep running in the background.
-
-- Execute `echo $DISPLAY` inside the container, Make sure the result is `host.docker.internal:0` so that it can be visualized on the host machine, if not:
-
-```
-export DISPLAY=host.docker.internal:0
-```
-
-
-##### Linux
-- TBD
-<br/>
-
+We provide the installation guide [here](Install/install.md). You can install locally or use docker and verify the installation easily.
 
 ## 👨‍💻 Basic Demos
 
@@ -194,7 +92,7 @@ If you want to enable **pybullet-blender-recorder**, please：
 
 <img width="1040" alt="image" src="https://github.com/user-attachments/assets/ab9e99c7-64c8-40fe-bbfe-edc0c786b812">
   
-2. Set `blender: Ture` in **Config/***.yaml**.
+2. Set `blender: Ture` in **Config/xxx.yaml**.
 
 3. After running the demo, a pkl file will be generated and saved in **Examples/record** dir
 
@@ -238,3 +136,7 @@ If you find this work useful, please consider citing:
 We would like to express our sincere gratitude to all the individuals and organizations who contributed to this project.
 
 For a detailed list of acknowledgements, please refer to [appendix](docs/appendix).
+
+## 🚀 Working citing BestMan
+
+Research has already been conducted based on the BestMan platform. If you are interested, please visit [here](https://bestmanrobot.com/Works_Citing_BestMan) for more details.

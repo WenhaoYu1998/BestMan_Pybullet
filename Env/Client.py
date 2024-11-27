@@ -17,11 +17,13 @@ from datetime import datetime
 import numpy as np
 import pybullet as p
 import pybullet_data
+from lisdf.parsing.sdf_j import load_sdf
+from lisdf.utils.transformations import euler_from_quaternion
+from tqdm import tqdm
 
 from Robotics_API import Pose
 from Visualization.blender_render import PyBulletRecorder
-from lisdf.parsing.sdf_j import load_sdf
-from lisdf.utils.transformations import euler_from_quaternion
+
 
 class Client:
     """
@@ -60,7 +62,7 @@ class Client:
 
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(cfg.Gravity[0], cfg.Gravity[1], cfg.Gravity[2])
-        p.setPhysicsEngineParameter(numSolverIterations=cfg.numSolverIterations)
+        # p.setPhysicsEngineParameter(numSolverIterations=cfg.numSolverIterations)
         # p.setRealTimeSimulation(1)  # set up real-time simulation
 
         # pybullet recorder for blender show
@@ -79,7 +81,7 @@ class Client:
         if plane_path.startswith("Asset"):
             os.path.join("..", plane_path)
         p.loadURDF(cfg.plane_urdf_path, flags=self.enable_cache)
-        
+
         # pybullet data
         self.pybullet_data = pybullet_data.getDataPath()
 
@@ -182,7 +184,7 @@ class Client:
             model_path = os.path.join("..", model_path)
         else:
             model_path = os.path.join(self.pybullet_data, model_path)
-        
+
         object_id = p.loadURDF(
             fileName=model_path,
             basePosition=object_position,
@@ -213,7 +215,7 @@ class Client:
         if scene_path.startswith("Asset"):
             scene_path = os.path.join("..", scene_path)
 
-        if scene_path.endswith('.json'):
+        if scene_path.endswith(".json"):
             with open(scene_path, "r") as f:
                 scene_data = json.load(f)
             for object in scene_data:
@@ -229,27 +231,33 @@ class Client:
                     object["scale"],
                     object["fixed_base"],
                 )
-        elif scene_path.endswith('.lisdf'):
+        elif scene_path.endswith(".lisdf"):
             lissdf_results = load_sdf(scene_path)
             models = lissdf_results.worlds[0].models
-            fixed_base=True
+            fixed_base = True
             for model in models:
-                model_uri = model.uri.replace('../../', 'Asset/Scene/')
-                orientation=list(reversed(euler_from_quaternion(list(reversed(model.pose.quat_wxyz)))))
+                model_uri = model.uri.replace("../../", "Asset/Scene/")
+                orientation = list(
+                    reversed(
+                        euler_from_quaternion(list(reversed(model.pose.quat_wxyz)))
+                    )
+                )
                 self.load_object(
                     model.name,
                     model_uri,
                     model.pose.pos,
                     orientation,
                     model.scale[0],
-                    fixed_base
+                    fixed_base,
                 )
         else:
             raise ValueError(
-                print("[Client] \033[31merror\033[0m: Scene format must be json or lisdf !")
-            )  
-            
-        self.run(120)  
+                print(
+                    "[Client] \033[31merror\033[0m: Scene format must be json or lisdf !"
+                )
+            )
+
+        self.run(120)
         print(f"[Client] \033[34mInfo\033[0m: Success load scene from {scene_path}!")
 
     # ----------------------------------------------------------------

@@ -66,7 +66,7 @@ def main(filename):
     # load bowl
     bowl_id = client.load_object(
         "bowl",
-        "Asset/Scene/URDF_models/utensil_bowl_blue/model.urdf",
+        "Asset/Scene/Object/URDF_models/utensil_bowl_blue/model.urdf",
         [3.8, 2.4, 0.95],
         [0.0, 0.0, 0.0],
         1.0,

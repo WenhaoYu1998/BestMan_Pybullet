@@ -30,7 +30,7 @@ def main():
     # Load scene
     scene_path = "Asset/Scene/Scene/Kitchen.json"
     # scene_path = "Asset/Scene/Scene/kitchen_world/kitchen_lunch_tlp.lisdf"
-    
+
     client.create_scene(scene_path)
 
     # client.wait(5)

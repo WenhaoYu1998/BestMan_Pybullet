@@ -10,13 +10,18 @@
 
 import math
 import os
+import pickle
+
+import numpy as np
 
 from Config import load_config
 from Env import Client
 from Motion_Planning.Manipulation.OMPL_Planner import OMPL_Planner
-from Perception.Grasp_Pose_Estimation import Anygrasp
-from Perception.Object_detection import Lang_SAM
-from Robotics_API import Bestman_sim_panda, Pose
+
+# from Perception.Grasp_Pose_Estimation import Anygrasp
+# from Perception.Object_detection import Lang_SAM
+from Robotics_API import Bestman_sim_panda_with_gripper, Pose
+from Utils import *
 from Visualization import Visualizer
 
 
@@ -36,10 +41,10 @@ def main():
     client.create_scene(scene_path)
 
     # Init robot
-    bestman = Bestman_sim_panda(client, visualizer, cfg)
-    end_effector_pose = bestman.sim_get_current_end_effector_pose()
-    end_effector_pose.print("init end effector pose")
-    visualizer.draw_pose(end_effector_pose)
+    bestman = Bestman_sim_panda_with_gripper(client, visualizer, cfg)
+    eef_pose = bestman.sim_get_current_eef_pose()
+    eef_pose.print("init end effector pose")
+    visualizer.draw_pose(eef_pose)
 
     # Debug, look for rgb and depth
     # bestman.sim_get_camera_rgb_image(False, True, "rgb_test")
@@ -50,24 +55,44 @@ def main():
     camera_pose = bestman.sim_get_camera_pose()
     visualizer.draw_pose(camera_pose)
 
-    # Init Lang_SAM and segment
-    lang_sam = Lang_SAM()
-    query = str(input("\033[34mInfo: Enter a Object name in the image: \033[0m"))
-    seg_mask, bbox = lang_sam.detect_obj(
-        bestman.camera.image,
-        query,
-        save_box=True,
-        box_filename="./output/sim_test/box.png",
-        save_mask=True,
-        mask_filename="./output/sim_test/mask.png",
+    # Lang SAM object segment
+    query = str(
+        input("[Lang_SAM] \033[34mInfo: Enter a Object name in the image: \033[0m")
     )
+    lang_sam = Submodule()
+    lang_sam.add("query", query)
+    lang_sam.add("input_img", bestman.camera.image)
+    lang_sam.add("box_filename", "./output/sim_test/box.png")
+    lang_sam.add("mask_filename", "./output/sim_test/mask.png")
+    lang_sam.call(
+        "lang-segment-anything", "Perception/Object_detection/Lang_SAM/Lang_SAM.py"
+    )
+    seg_mask = lang_sam.get("seg_mask", np.ndarray)
+    bbox = lang_sam.get("bbox", np.ndarray)
 
-    # Init AnyGrasp
-    anygrasp = Anygrasp(cfg.Grasp_Pose_Estimation.AnyGrasp)
-    best_pose = anygrasp.Grasp_Pose_Estimation(bestman.camera, seg_mask, bbox)
-    best_pose = bestman.sim_trans_camera_to_world(best_pose)
-    best_pose = bestman.align_grasp_pose_to_tcp([0, 0, -1], best_pose)
-    visualizer.draw_pose(best_pose)
+    # AnyGrasp pose estimation
+    points, colors = bestman.sim_get_camera_3d_points()
+    anygrasp = Submodule()
+    anygrasp.add("anygrasp_cfg", cfg.Grasp_Pose_Estimation.AnyGrasp)
+    anygrasp.add("camera_cfg", cfg.Camera)
+    anygrasp.add("points", points)
+    anygrasp.add("image", bestman.camera.image)
+    anygrasp.add("colors", colors)
+    anygrasp.add("seg_mask", seg_mask)
+    anygrasp.add("bbox", bbox)
+    anygrasp.call("anygrasp", "Perception/Grasp_Pose_Estimation/AnyGrasp/Anygrasp.py")
+    best_pose = anygrasp.get("best_pose")
+    print(best_pose)
+
+    # anygrasp = Anygrasp(cfg.Grasp_Pose_Estimation.AnyGrasp)
+    # print(type(cfg.Grasp_Pose_Estimation.AnyGrasp))
+    # print(cfg.Grasp_Pose_Estimation.AnyGrasp)
+    # best_pose = anygrasp.Grasp_Pose_Estimation(bestman.camera, seg_mask, bbox)
+    # print(type(best_pose))
+    # print(best_pose)
+    # best_pose = bestman.sim_trans_camera_to_world(best_pose)
+    # best_pose = bestman.align_grasp_pose_to_tcp([0, 0, -1], best_pose)
+    # visualizer.draw_pose(best_pose)
 
     # Init ompl
     # ompl_planner = OMPL_Planner(bestman, cfg.Planner)
@@ -78,15 +103,15 @@ def main():
     # bestman.execute_trajectory(path, enable_plot=True)
 
     # bestman.sim_open_gripper()
-    # bestman.sim_move_end_effector_to_goal_pose(best_pose, 50)
-    # visualizer.draw_link_pose(bestman.sim_get_arm_id(), bestman.sim_get_end_effector_link())
-    bestman.pick(best_pose)
-    tmp_position = best_pose.get_position()
-    tmp_pose = Pose(
-        [tmp_position[0], tmp_position[1], tmp_position[2] + 0.4],
-        best_pose.get_orientation(),
-    )
-    bestman.sim_move_end_effector_to_goal_pose(tmp_pose, 50)
+    # bestman.sim_move_eef_to_goal_pose(best_pose, 50)
+    # visualizer.draw_link_pose(bestman.sim_get_arm_id(), bestman.sim_get_eef_link())
+    # bestman.pick(best_pose)
+    # tmp_position = best_pose.get_position()
+    # tmp_pose = Pose(
+    #     [tmp_position[0], tmp_position[1], tmp_position[2] + 0.4],
+    #     best_pose.get_orientation(),
+    # )
+    # bestman.sim_move_eef_to_goal_pose(tmp_pose, 50)
 
     # client.wait(5)
     # bestman.sim_close_gripper()

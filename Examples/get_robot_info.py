@@ -39,7 +39,7 @@ def main(filename):
     bestman = Bestman_sim_ur5e_vacuum_long(client, visualizer, cfg)
 
     # Get info about arm
-    jointInfo = bestman.sim_get_arm_all_jointInfo()
+    jointInfo = bestman.sim_get_arm_jointInfo()
     for info in jointInfo:
         print(info)
 

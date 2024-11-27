@@ -1,0 +1,24 @@
+- [bullet3](https://github.com/bulletphysics/bullet3): We refer to panda and xarm robotic arms and the xarm gripper,the underlying simulation is driven by the pybullet engine.
+- [PartNet Mobility dataset](https://sapien.ucsd.edu/browse): We use articulated urdf objects from PartNet Mobility dataset.
+- [pybullet-URDF-models](https://github.com/ChenEating716/pybullet-URDF-models): We use rigid urdf objects from pybullet-URDF-models.
+- [YCB dataset](http://ycb-benchmarks.s3-website-us-east-1.amazonaws.com/): We use rigid 3D models from YCB dataset.
+- [urdf_files_dataset](https://github.com/Daniella1/urdf_files_dataset): We refer to ur5e arm from urdf_files_dataset.
+- [flexiv_rdk](https://github.com/flexivrobotics/flexiv_rdk): We refer to flexiv arm from flexiv_rdk.
+- [mycobot_ros](https://github.com/elephantrobotics/mycobot_ros): We refer to elephant arm from mycobot_ros.
+- [ugv_gazebo_sim](https://github.com/agilexrobotics/ugv_gazebo_sim): We refer to ranger mini base from ugv_gazebo_sim.
+- [dh_ag95_gripper_ros2](https://github.com/ian-chuang/dh_ag95_gripper_ros2): We refer to ag-95 gripper from dh_ag95_gripper_ros2.
+- [robotiq_arg85_description](https://github.com/a-price/robotiq_arg85_description): We refer to robotiq 2f-85 gripper from robotiq_arg85_description.
+- [Wiki-GRx-Models](https://github.com/FFTAI/Wiki-GRx-Models): We refer to humanoid model from Wiki-GRx-Models.
+- [ompl](https://github.com/ompl/ompl): We utilize the algorithms provided by OMPL (Open Motion Planning Library) for motion planning.
+- [anygrasp_sdk](https://github.com/graspnet/anygrasp_sdk): We integrate the AnyGrasp algorithm for grasp pose estimation.
+- [lang-segment-anything](https://github.com/luca-medeiros/lang-segment-anything): We integrate the Lang SAM algorithm for object detection.
+- [pybullet-blender-recorder](https://github.com/huy-ha/pybullet-blender-recorder): We use pyBulletSimRecorder and pyBulletSimImport from pybullet-blender-recorder to render the simulation scene better.
+- [FFmpeg](https://github.com/FFmpeg/FFmpeg): We use FFmpeg for real-time video recording.
+- [isort](https://github.com/PyCQA/isort): We used the isort tool to standardize library imports.
+- [black](https://github.com/psf/black): We use the clack tool to standardize code style.
+- [pre-commit](https://github.com/pre-commit/pre-commit): We use pre-commit to automatically run code checks before committing changes.
+- [kitchen-worlds](https://github.com/Learning-and-Intelligent-Systems/kitchen-worlds): We refer to the scene generation method and scene data of kitchen_world.
+- [pybullet_ur5_robotiq](https://github.com/ElectronicElephant/pybullet_ur5_robotiq): We refer to the gripper model and control of pybullet_ur5_robotiq.
+- [urdformer](https://github.com/starry521/urdformer.git): We integrate urdformer submodule to generate 3D urdf models from 2D images.
+- [acdc](https://github.com/starry521/digital-cousins.git): We integrate digital cousins submodule to create 3D scene from 2D images.
+- [pddlstream](https://github.com/starry521/pddlstream.git): We integrate pddlstream submodule to task planing.

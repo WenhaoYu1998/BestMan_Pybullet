@@ -1,0 +1,20 @@
+# Client parameters
+Client:
+  enable_Debug: False
+
+# Visualizer params
+Visualizer:
+  Camera: 
+      dist: 1.2
+      position: [-0.97, 0.03, 0.94]
+      yaw: -83.6
+      pitch: -31.5
+
+
+# Robot params
+Robot:
+  base_init_pose: [0, 0.5, 0, 0.0, 0.0, 0.0] 
+  arm_reset_jointValues: [-1.5690622952052096, -1.5446774605904932, 1.343946009733127, -1.3708613585093699, -1.5707970583733368, 0.0009377758247187636]
+  arm_urdf_path: "Asset/Robot/mobile_manipulator/arm/universal/urdf/ur5e_robotiq_2f85.urdf"          # arm urdf
+  arm_num_dofs: 6                                      # 6 DOF
+  eef_id: 7

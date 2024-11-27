@@ -9,11 +9,12 @@
 """
 
 import os
+import time
 
 from Config import load_config
 from Env import Client
 from Motion_Planning.Navigation import *
-from Robotics_API import Bestman_sim_xarm
+from Robotics_API import Bestman_sim_xarm_with_gripper
 from Visualization import Visualizer
 
 
@@ -28,16 +29,16 @@ def main(filename):
     client = Client(cfg.Client)
     visualizer = Visualizer(client, cfg.Visualizer)
     visualizer.draw_axes()
-    
+
     # Start record
     visualizer.start_record(filename)
 
     # Init robot
-    xarm = Bestman_sim_xarm(client, visualizer, cfg)
+    xarm = Bestman_sim_xarm_with_gripper(client, visualizer, cfg)
 
     # Interact with arm
-    xarm.sim_interactive_set_arm(20)
-    # xarm.sim_interactive_set_gripper(1000)
+    # xarm.sim_interactive_control_arm(10)
+    xarm.sim_interactive_control_eef(100)
 
     # client.wait(10)
     # visualizer.capture_screen("xarm")

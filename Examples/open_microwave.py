@@ -130,7 +130,7 @@ def main(filename):
     visualizer.remove_all_line()
 
     # The end effector Move along the specified trajectory get effector to open the door
-    init_pose = bestman.sim_get_current_end_effector_pose()
+    init_pose = bestman.sim_get_current_eef_pose()
 
     microwave_id = client.get_object_id("microwave")
     rotate_axis = p.getLinkState(microwave_id, 1)[4]

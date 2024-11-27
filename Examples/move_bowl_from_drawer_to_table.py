@@ -37,7 +37,7 @@ def main(filename):
     client.create_scene(scene_path)
 
     # Start record
-    visualizer.start_record(filename)
+    # visualizer.start_record(filename)
 
     # Init robot
     bestman = Bestman_sim_ur5e_vacuum_long(client, visualizer, cfg)
@@ -68,7 +68,7 @@ def main(filename):
     # Load bowl
     bowl_id = client.load_object(
         "bowl",
-        "Asset/Scene/URDF_models/utensil_bowl_blue/model.urdf",
+        "Asset/Scene/Object/URDF_models/utensil_bowl_blue/model.urdf",
         [3.6, 2.4, 0.6],
         [0.0, 0.0, 0.0],
         1.0,
@@ -106,17 +106,17 @@ def main(filename):
 
     # Move arm to table
     place_pose = Pose([1.0, 1.0, 1.0], [0.0, math.pi / 2.0, 0.0])
-    bestman.sim_move_end_effector_to_goal_pose(place_pose)
+    bestman.sim_move_eef_to_goal_pose(place_pose)
 
     # place the bowl
     bestman.sim_close_vacuum_gripper()
 
     # Up arm
     place_pose = Pose([1.0, 1.0, 1.5], [0.0, math.pi / 2.0, 0.0])
-    bestman.sim_move_end_effector_to_goal_pose(place_pose)
+    bestman.sim_move_eef_to_goal_pose(place_pose)
 
     # End record
-    visualizer.end_record()
+    # visualizer.end_record()
 
     # disconnect
     client.wait(10)

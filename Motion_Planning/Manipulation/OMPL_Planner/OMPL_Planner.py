@@ -34,7 +34,7 @@ class OMPL_Planner:
         # arm info
         self.robot = robot
         self.arm_id = robot.sim_get_arm_id()
-        self.joint_idx = robot.sim_get_arm_joint_idx()
+        self.arm_controllable_joints = robot.sim_get_arm_controllable_joints()
         self.tcp_link = robot.sim_get_tcp_link()
         self.DOF = robot.sim_get_DOF()
 
@@ -134,7 +134,7 @@ class OMPL_Planner:
         goal = self.robot.sim_cartesian_to_joints(goal_pose)
 
         return goal
-    
+
     def set_target_pose(self, target_pose):
         """
         Set the target pose for the planner.
@@ -142,7 +142,7 @@ class OMPL_Planner:
         Args:
             pose (Pose): The target pose for the planning algorithm. This must include
                         the position and orientation of the target.
-        
+
         Returns:
             bool: True if the target pose was successfully set, False otherwise.
         """

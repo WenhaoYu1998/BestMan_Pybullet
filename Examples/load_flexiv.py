@@ -13,7 +13,7 @@ import os
 
 from Config import load_config
 from Env.Client import Client
-from Robotics_API import Bestman_sim_flexiv
+from Robotics_API import Bestman_sim_flexiv_robotiq_2f85
 from Visualization.Visualizer import Visualizer
 
 
@@ -32,15 +32,13 @@ def main(filename):
     visualizer.start_record(filename)
 
     # Init robot
-    flexiv = Bestman_sim_flexiv(client, visualizer, cfg)
+    flexiv = Bestman_sim_flexiv_robotiq_2f85(client, visualizer, cfg)
 
-    # flexiv.sim_print_arm_jointInfo()
-    
     # Interact with arm
-    # panda.sim_interactive_set_arm(1000)
+    # flexiv.sim_interactive_control_arm(100)
 
-    # Interact with gripper
-    # panda.sim_interactive_set_gripper()
+    # interct with eef
+    flexiv.sim_interactive_control_eef(100)
 
     # client.wait(10)
 
